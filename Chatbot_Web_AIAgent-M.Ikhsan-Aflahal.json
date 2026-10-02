@@ -1,0 +1,117 @@
+{
+  "name": "Chatbot Web AI Agent - Asisten Jaringan & Keamanan Siber",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! 👋 Saya Asisten NetSec, chatbot AI yang siap membantu kamu belajar jaringan komputer dan keamanan siber. Mau tanya apa hari ini?",
+        "options": {
+          "responseMode": "lastNode"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f79dcdfd-fb16-45ff-965d-68e4f1f865ab",
+      "name": "When chat message received",
+      "webhookId": "7d3f2b1e-5a4c-4e8b-9f10-2c6a8b9d1e01"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "## Garis Besar\nAnda adalah Asisten NetSec, asisten belajar yang ramah dan sabar untuk mahasiswa informatika. Tugas Anda adalah menjawab pertanyaan seputar jaringan komputer (model OSI/TCP-IP, IP address, subnetting, routing, DNS, DHCP, protokol umum) dan dasar-dasar keamanan siber (enkripsi, firewall, malware, phishing, autentikasi, praktik keamanan dasar).\n\n# Aturan\n- Jawab dengan sederhana, jelas, dan menarik; gunakan analogi singkat jika membantu.\n- Jaga jawaban kurang dari 200 kata.\n- Gunakan bahasa Indonesia yang baik dan sopan, dengan emoji secukupnya.\n- Jika pertanyaan di luar topik jaringan komputer dan keamanan siber, jawab dengan sopan bahwa Anda hanya membantu topik tersebut dan arahkan kembali ke topik.\n- Jika Anda tidak yakin atau tidak tahu jawabannya, jangan mengarang jawaban. Jawab jujur: \"Maaf, saya belum memiliki informasi yang pasti tentang itu.\"\n- Hanya berikan penjelasan konsep dan pembelajaran yang bersifat defensif; jangan memberikan panduan untuk meretas atau menyerang sistem milik orang lain.\n\n# Contoh\nPertanyaan: Apa itu DNS?\nJawaban: DNS (Domain Name System) itu seperti buku telepon internet 📖. Saat kamu mengetik nama situs seperti google.com, DNS menerjemahkannya menjadi alamat IP yang dimengerti komputer. Tanpa DNS, kita harus menghafal angka IP setiap situs!"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "2cc9d360-b161-4589-976b-c41ba4b7aa32",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        128,
+        224
+      ],
+      "id": "fe4bedd3-de3c-4c46-9c2e-1d2dd4c77850",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NpszD4haj1e0Maxm",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        224
+      ],
+      "id": "12129e84-113f-4f94-83aa-c26dc48ca07a",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a8151779-cf7b-4a76-ac10-4fa035b3d8e1",
+  "meta": {
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "KHNc7l340G7pFRsT",
+  "tags": []
+}
